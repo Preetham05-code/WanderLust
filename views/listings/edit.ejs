@@ -1,0 +1,90 @@
+<% layout("/layouts/boilerplate") %>
+
+<body>
+    <div class="row">
+        <div class="col-8 offset-2 mt-3" >
+            <h2>Edit Listing</h2>
+            <form method="POST" action="/listings/<%= List._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
+                
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input name="listing[title]" value="<%= List.title %>" class="form-control" required>
+                    <div class="invalid-feedback">Title required!</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="discription" class="form-label">Description</label>
+                    <textarea name="listing[description]" class="form-control" required ><%= List.description %></textarea>     
+                    <div class="invalid-feedback">Description can't be empty! :[ </div>
+                      
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Upload new image </label>
+                    <input name="listing[image][url]" class="form-control" type="file" >
+                </div>   
+
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input name="listing[price]" class="form-control" value="<%= List.price %>" required>
+                        <div class="invalid-feedback">Please enter the price</div>
+                    </div>
+                
+                    <div class="col-md-5 mb-3">
+                        <label for="location" class="form-label">Location</label>
+                        <input name="listing[location]" class="form-control" value="<%= List.location %>" % required type="text">
+                        <div class="invalid-feedback">Location should be valid</div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="country" class="form-label">Country</label>
+                            <input name="listing[country]" class="form-control" value="<%= List.country %>" required>
+                            <div class="invalid-feedback">Country name should be valid</div>
+                    </div>
+                </div>
+                
+
+                <button class="btn add-btn mt-3">Edit</button>
+                <br/><br/>
+            </form>
+        </div>
+    </div>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderLust</title>
+</head>
+<body>
+    <h2>Edit Listing</h2>
+    <form method="POST" action="/listings/<%= List._id %>?_method=PUT" >
+        <input name="listing[title]" value="<%= List.title %>">
+        <br><br>
+        <textarea name="listing[description]" style="width: 300px; height: 100px;"><%= List.description %></textarea>
+        <br><br>
+        <input name="listing[image]" value= "<%= List.image.url %>">
+        <br><br>
+        <input name="listing[price]" value="<%= List.price %>">
+        <br><br>
+        <input name="listing[location]" value="<%= List.location %>" %> type="text">
+        <br><br>
+        <input name="listing[country]" value="<%= List.country %>">
+        <br><br>
+            <button>Submit</button>
+    </form>
+</body>
+</html> -->

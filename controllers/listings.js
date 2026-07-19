@@ -12,6 +12,22 @@ module.exports.index =  async (req,res)=>{
     res.render("listings/index.ejs", {allListings});
 };
 
+// controllers/listings.js
+
+// Feeling Lucky: fetch one random listing via MongoDB's $sample aggregation
+// and redirect the user straight to its show page.
+module.exports.randomListing = async (req, res) => {
+  const [randomListing] = await Listing.aggregate([{ $sample: { size: 1 } }]);
+
+  if (!randomListing) {
+    // No listings in the DB — fail gracefully instead of erroring out
+    req.flash("error", "No listings available right now. Check back soon!");
+    return res.redirect("/listings");
+  }
+
+  res.redirect(`/listings/${randomListing._id}`);
+};
+
 
 module.exports.renderNewForm =  (req,res)=>{
     res.render("listings/new.ejs"); 

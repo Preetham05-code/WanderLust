@@ -23,6 +23,16 @@ router.route("/")
 //New Route
 router.get("/new", isLoggedIn , listingController.renderNewForm);
 
+// routes/listing.js
+
+// IMPORTANT: this must come before router.route("/:id") below,
+// otherwise Express treats "random" as an :id param.
+router.get("/random", wrapAsync(listingController.randomListing));
+
+// ... your existing /:id route(s) stay exactly where they are, unchanged
+router.route("/:id")
+  .get(wrapAsync(listingController.showListing))
+  // .put / .delete as you already have them
 
 router.route("/:id")
     .get(wrapAsync ( listingController.showListing))

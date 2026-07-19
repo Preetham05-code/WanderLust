@@ -115,3 +115,182 @@ body{
     width: 100%;
     border-radius: 10px;   /* optional */
 }
+
+/* ===== Hero Section ===== */
+.hero-section {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  height: 60vh;
+  min-height: 380px;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+    url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.hero-overlay {
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.hero-content {
+  max-width: 700px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.hero-headline {
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  margin-bottom: 1.75rem;
+  opacity: 0.95;
+}
+
+.hero-search-bar {
+  background: #fff;
+  border-radius: 50px;
+  padding: 0.4rem 0.4rem 0.4rem 1.25rem;
+  max-width: 480px;
+  margin: 0 auto;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.hero-search-input {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+  font-size: 1rem;
+}
+.hero-search-input:focus {
+  box-shadow: none;
+}
+
+.hero-search-btn {
+  background-color: #ff385c;
+  color: #fff;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+.hero-search-btn:hover {
+  background-color: #e31c5f;
+  color: #fff;
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+  .hero-section {
+    height: 50vh;
+    min-height: 320px;
+  }
+  .hero-headline {
+    font-size: 1.9rem;
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* ===== Feeling Lucky Card ===== */
+.lucky-card {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 1.75rem 2rem;
+  border-radius: 20px;
+
+  /* Glassmorphism */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+
+  color: #fff;
+  animation: fadeIn 1s ease-out, floatCard 4s ease-in-out infinite;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lucky-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.lucky-icon {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.lucky-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.lucky-text {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin-bottom: 1.25rem;
+}
+
+.lucky-btn {
+  background-color: #ff385c;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  padding: 0.65rem 1.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.lucky-btn:hover {
+  background-color: #e31c5f;
+  color: #fff;
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(255, 56, 92, 0.45);
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 576px) {
+  .lucky-card {
+    max-width: 90%;
+    padding: 1.25rem 1.5rem;
+  }
+  .lucky-title {
+    font-size: 1.2rem;
+  }
+  .lucky-text {
+    font-size: 0.85rem;
+  }
+}

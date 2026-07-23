@@ -15,10 +15,14 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const aiListingsRoutes = require("./routes/aiListings");
+app.use(express.json());
+app.use("/api", aiListingsRoutes);
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
+const aiRoutes = require("./routes/ai");
 
 
 app.set("view engine", "ejs");
@@ -27,6 +31,8 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine("ejs" , ejsMate);
+
+app.use("/api/ai", aiRoutes);
 
 // let MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 const dbUrl = process.env.ATLASDB_URL;
@@ -73,6 +79,13 @@ const sessionOptions = {
         httpOnly: true,
     },
 };
+
+app.get("/test-ai", async (req, res) => {
+    res.json({
+        success: true,
+        message: "Backend is working!"
+    });
+});
 
 // app.get("/",(req,res)=>{
 //     res.send("You are in main root");
@@ -140,3 +153,4 @@ app.use((err,req,res,next)=>{
 app.listen(8080,()=>{
     console.log("App is running in the port 8080");
 });
+

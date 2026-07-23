@@ -60,8 +60,7 @@ async function sendMessage() {
             },
 
             body: JSON.stringify({
-                message,
-                sessionId: getOrCreateSessionId()
+                message
 
             })
 

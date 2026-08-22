@@ -1,6 +1,6 @@
 # 🏡 WanderLust
 
-**WanderLust** is a full-stack, Airbnb-inspired vacation rental platform where users can explore, list, book, and review unique stays around the world — from cozy cabins and beachfront cottages to castles and private islands.
+**WanderLust** is an AI-assisted MERN Stack vacation rental platform inspired by Airbnb, where users can explore, list, book, and review unique stays around the world — from cozy cabins and beachfront cottages to castles and private islands. It now features an integrated **AI Travel Assistant** that helps users discover listings and get travel guidance through natural conversation.
 
 🔗 **Live Demo:** [wanderlust-554z.onrender.com/listings](https://wanderlust-554z.onrender.com/listings)
 
@@ -9,6 +9,8 @@
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white)
 ![EJS](https://img.shields.io/badge/EJS-90A93A?style=flat)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=flat&logo=bootstrap&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=flat&logo=openai&logoColor=white)
+![n8n](https://img.shields.io/badge/n8n-EA4B71?style=flat&logo=n8n&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 ---
@@ -18,7 +20,9 @@
 - [Overview](#-overview)
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
+- [AI Travel Assistant](#-ai-travel-assistant)
 - [Project Architecture](#-project-architecture)
+- [Project Preview](#-project-preview)
 - [Getting Started](#-getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -37,6 +41,8 @@
 
 WanderLust brings the core Airbnb experience to life — hosts can list their properties with photos, pricing, and location details, while travelers can browse, search, filter by category, and book stays that match their vibe. Built with a classic and battle-tested **MVC architecture** (Node.js + Express + MongoDB + EJS), the project is a hands-on demonstration of full-stack web development: authentication, CRUD operations, file/image uploads, geolocation, and server-side rendering — all wired together into one cohesive booking platform.
 
+The platform has since been extended with an **AI Travel Assistant**, powered by **n8n** and **OpenAI**, that connects directly to the MongoDB listings database. Users can ask travel-related questions in natural language and receive conversational, context-aware recommendations pulled from live listing data.
+
 ## ✨ Features
 
 - 🔐 **Secure Authentication & Authorization** — Sign up, log in, and log out with session-based auth; only owners can edit or delete their own listings/reviews.
@@ -49,6 +55,11 @@ WanderLust brings the core Airbnb experience to life — hosts can list their pr
 - 📱 **Responsive UI** — Clean, mobile-friendly interface styled with Bootstrap and custom CSS.
 - ✅ **Server-Side Validation & Error Handling** — Schema validation (Joi) and centralized error middleware for robust, predictable behavior.
 - 🍞 **Flash Messages** — Real-time success/error feedback for actions like login, listing creation, and reviews.
+- 🤖 **AI Travel Assistant** — A conversational assistant that helps users find stays and answers travel-related questions.
+- 🧭 **AI-Powered Listing Recommendations** — Suggests relevant listings pulled live from the MongoDB database.
+- 🧠 **Conversation Memory** — Retains context across a conversation for more natural, coherent follow-ups.
+- 🔗 **AI Connected to the Database** — The assistant queries real listing data rather than relying on static or hallucinated responses.
+- 💬 **Natural Language Travel Assistance** — Ask questions in plain English and get concise, relevant answers.
 
 ## 🛠️ Tech Stack
 
@@ -59,15 +70,46 @@ WanderLust brings the core Airbnb experience to life — hosts can list their pr
 | **Database**         | MongoDB with Mongoose ODM                                |
 | **Authentication**   | Passport.js (Local Strategy), express-session            |
 | **Image Storage**    | Cloudinary + Multer                                       |
-| **Maps/Geocoding**   | Leaflet.js + OpenStreetMap (OSM) + Node-Geocoder (OpenStreetMap Provider)                                                  |
+| **Maps/Geocoding**   | Leaflet.js + OpenStreetMap (OSM) + Node-Geocoder (OpenStreetMap Provider) |
+| **AI Assistant**     | OpenAI (LLM) + n8n (workflow automation & orchestration)  |
 | **Validation**       | Joi                                                        |
 | **Deployment**       | Render + MongoDB Atlas                                     |
 
-> ⚠️ Adjust this table if your actual repo swaps out any of these (e.g., a different map provider or OAuth instead of local auth) — I based this on your live deployment's features since the GitHub link you shared returned a 404.
+## 🤖 AI Travel Assistant
+
+WanderLust includes a built-in AI Travel Assistant that lets users get help and recommendations without leaving the chat window. It:
+
+- Answers travel-related questions in natural language
+- Recommends listings pulled live from the MongoDB database
+- Uses conversation memory to maintain context across multiple turns
+- Retrieves live data through an Express API rather than static content
+- Returns concise, user-friendly responses suited for a chat interface
+
+**Workflow:**
+
+```
+User
+  ↓
+WanderLust Chatbot
+  ↓
+Express Backend
+  ↓
+n8n Workflow
+  ↓
+OpenAI
+  ↓
+Listings API
+  ↓
+MongoDB
+  ↓
+AI Response
+```
+
+The assistant is orchestrated entirely through an **n8n workflow**: incoming chat messages are routed from the Express backend into n8n, which coordinates the call to OpenAI and, when needed, queries the Listings API for live MongoDB data before returning a formatted response to the user.
 
 ## 🏗️ Project Architecture
 
-WanderLust follows the **MVC (Model-View-Controller)** pattern for clean separation of concerns:
+WanderLust's core application follows the **MVC (Model-View-Controller)** pattern for clean separation of concerns:
 
 ```
 Client Request → Routes → Controllers → Models (MongoDB) → Views (EJS) → Response
@@ -78,6 +120,18 @@ Client Request → Routes → Controllers → Models (MongoDB) → Views (EJS) �
 - **Routes** map HTTP endpoints to controller actions.
 - **Views** render dynamic EJS templates for the UI.
 - **Middleware** handles authentication checks, validation, and error catching.
+
+The AI layer sits alongside this MVC structure as its own service:
+
+```
+Chat Request → AI Routes → AI Controller → AI Service → n8n Workflow → OpenAI + MongoDB → AI Response
+```
+
+- **AI Routes** (`routes/ai.js`) expose the chatbot endpoint.
+- **AI Controller** (`controllers/ai.js`) handles incoming chat requests and responses.
+- **AI Service** (`services/aiService.js`) manages communication with the n8n workflow.
+- **n8n** orchestrates the OpenAI call and, when relevant, queries the Listings API for live MongoDB data.
+
 
 ## 🚀 Getting Started
 
@@ -91,7 +145,8 @@ Make sure you have the following installed:
 - [MongoDB](https://www.mongodb.com/) (local instance or a MongoDB Atlas connection string)
 - npm (comes bundled with Node.js)
 - A [Cloudinary](https://cloudinary.com/) account (for image uploads)
-
+- An [OpenAI](https://platform.openai.com/) API key (for the AI Travel Assistant)
+- An [n8n](https://n8n.io/) instance (self-hosted or cloud) to run the assistant's workflow
 
 ### Installation
 
@@ -117,6 +172,9 @@ SECRET=your_session_secret
 CLOUD_NAME=your_cloudinary_cloud_name
 CLOUD_API_KEY=your_cloudinary_api_key
 CLOUD_API_SECRET=your_cloudinary_api_secret
+
+OPENAI_API_KEY=your_openai_api_key
+N8N_WEBHOOK_URL=your_n8n_workflow_webhook_url
 ```
 
 > 🔒 Never commit your `.env` file. Make sure it's listed in `.gitignore`.
@@ -142,28 +200,33 @@ CLOUD_API_SECRET=your_cloudinary_api_secret
    http://localhost:8080/listings
    ```
 
+4. The AI Travel Assistant will be available from the chatbot UI once your `N8N_WEBHOOK_URL` and `OPENAI_API_KEY` are configured.
+
 ## 📁 Folder Structure
 
 ```
 WanderLust/
-├── controllers/        # Business logic for listings, reviews, users
-├── models/              # Mongoose schemas (Listing, Review, User)
-├── routes/              # Express route definitions
-├── views/               # EJS templates and partials
+├── controllers/         # Business logic for listings, reviews, users, AI
+│   └── ai.js            # AI chatbot request handling
+├── models/               # Mongoose schemas (Listing, Review, User)
+├── routes/               # Express route definitions
+│   └── ai.js             # AI chatbot API routes
+├── services/             # External service integrations
+│   └── aiService.js      # Handles communication with the n8n workflow
+├── views/                # EJS templates and partials
 │   ├── layouts/
 │   ├── listings/
 │   ├── users/
 │   └── includes/
-├── public/              # Static assets (CSS, JS, images)
-├── utils/               # Helper utilities (wrapAsync, ExpressError)
-├── middleware.js        # Auth & validation middleware
-├── schema.js            # Joi validation schemas
-├── cloudConfig.js        # Cloudinary configuration
-├── app.js               # Application entry point
+├── public/               # Static assets (CSS, JS, images)
+├── utils/                # Helper utilities (wrapAsync, ExpressError)
+├── middleware.js         # Auth & validation middleware
+├── schema.js             # Joi validation schemas
+├── cloudConfig.js         # Cloudinary configuration
+├── app.js                # Application entry point
 ├── package.json
 └── .env
 ```
-
 
 ## 🗺️ Roadmap
 
@@ -173,6 +236,9 @@ WanderLust/
 - [ ] Host dashboard with analytics
 - [ ] Google / GitHub OAuth login
 - [ ] Email notifications for bookings and reviews
+- [ ] Personalized AI itinerary generation
+- [ ] Voice-enabled AI assistant
+- [ ] AI-based travel recommendations tailored to user preferences
 
 ## 🤝 Contributing
 
@@ -195,6 +261,8 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 - Inspired by [Airbnb](https://www.airbnb.com/)
 - [Bootstrap](https://getbootstrap.com/) for UI components
 - [Cloudinary](https://cloudinary.com/) for media hosting
+- [OpenAI](https://openai.com/) for powering the AI Travel Assistant
+- [n8n](https://n8n.io/) for workflow orchestration
 - [Render](https://render.com/) for deployment
 
 ## 📬 Contact

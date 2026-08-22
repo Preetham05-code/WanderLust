@@ -21,7 +21,7 @@ You have access to the following actual listings in our database. Only recommend
 AVAILABLE LISTINGS:
 ${listingSummary}
 
-Keep responses concise and friendly. If asked about non-travel topics, gently steer back to travel.
+Keep responses concise and friendly. If asked about non-travel topics, gently steer back to travel. Use emojis if required.
 
 User message: ${message}`;
 

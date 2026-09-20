@@ -9,8 +9,8 @@
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white)
 ![EJS](https://img.shields.io/badge/EJS-90A93A?style=flat)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=flat&logo=bootstrap&logoColor=white)
-![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=flat&logo=openai&logoColor=white)
-![n8n](https://img.shields.io/badge/n8n-EA4B71?style=flat&logo=n8n&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=flat&logo=googlegemini&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 ---
@@ -41,11 +41,12 @@
 
 WanderLust brings the core Airbnb experience to life — hosts can list their properties with photos, pricing, and location details, while travelers can browse, search, filter by category, and book stays that match their vibe. Built with a classic and battle-tested **MVC architecture** (Node.js + Express + MongoDB + EJS), the project is a hands-on demonstration of full-stack web development: authentication, CRUD operations, file/image uploads, geolocation, and server-side rendering — all wired together into one cohesive booking platform.
 
-The platform has since been extended with an **AI Travel Assistant**, powered by **n8n** and **OpenAI**, that connects directly to the MongoDB listings database. Users can ask travel-related questions in natural language and receive conversational, context-aware recommendations pulled from live listing data.
+The platform has since been extended with an **AI Travel Assistant**, powered by **Google Gemini**, that connects directly to the MongoDB listings database. Users can ask travel-related questions in natural language and receive conversational, context-aware recommendations pulled from live listing data.
 
 ## ✨ Features
 
-- 🔐 **Secure Authentication & Authorization** — Sign up, log in, and log out with session-based auth; only owners can edit or delete their own listings/reviews.
+- 🔐 **Secure Authentication & Authorization** — Sign up, log in, and log out with session-based auth; supports traditional username/password authentication and Google Sign-In using Firebase Authentication.
+- 🔑 **Google Sign-In** — Users can authenticate with their Google account through Firebase Authentication, while the verified Firebase identity is linked to the WanderLust user record and application session.
 - 🏠 **Full CRUD for Listings** — Create, view, update, and delete property listings with title, description, price, location, and images.
 - 🖼️ **Cloud Image Hosting** — Listing photos are uploaded and served via Cloudinary for fast, reliable delivery.
 - 🗺️ **Interactive Maps** — Each listing displays its location on an embedded map using geocoding for real-world coordinates.
@@ -68,10 +69,10 @@ The platform has since been extended with an **AI Travel Assistant**, powered by
 | **Frontend**         | EJS, EJS-Mate (layouts), Bootstrap 5, CSS3, JavaScript   |
 | **Backend**          | Node.js, Express.js                                      |
 | **Database**         | MongoDB with Mongoose ODM                                |
-| **Authentication**   | Passport.js (Local Strategy), express-session            |
+| **Authentication**   | Passport.js (Local Strategy), Firebase Authentication, express-session |
 | **Image Storage**    | Cloudinary + Multer                                       |
 | **Maps/Geocoding**   | Leaflet.js + OpenStreetMap (OSM) + Node-Geocoder (OpenStreetMap Provider) |
-| **AI Assistant**     | OpenAI (LLM) + n8n (workflow automation & orchestration)  |
+| **AI Assistant**     | Google Gemini API + Express.js                            |
 | **Validation**       | Joi                                                        |
 | **Deployment**       | Render + MongoDB Atlas                                     |
 
@@ -94,9 +95,7 @@ WanderLust Chatbot
   ↓
 Express Backend
   ↓
-n8n Workflow
-  ↓
-OpenAI
+Google Gemini
   ↓
 Listings API
   ↓
@@ -105,7 +104,38 @@ MongoDB
 AI Response
 ```
 
-The assistant is orchestrated entirely through an **n8n workflow**: incoming chat messages are routed from the Express backend into n8n, which coordinates the call to OpenAI and, when needed, queries the Listings API for live MongoDB data before returning a formatted response to the user.
+The assistant is integrated directly with **Google Gemini** through the application backend. Incoming chat messages are processed by the Express backend, which communicates with Gemini and, when needed, uses the Listings API to access live MongoDB listing data before returning a formatted response to the user.
+
+## 🔐 Google Authentication
+
+WanderLust supports Google Sign-In using **Firebase Authentication** while retaining the existing Passport.js authentication system.
+
+**Authentication flow:**
+
+```text
+User
+  ↓
+Google Sign-In
+  ↓
+Firebase Authentication
+  ↓
+Firebase ID Token
+  ↓
+Express Backend
+  ↓
+Firebase Admin SDK verifies token
+  ↓
+MongoDB User
+  ↓
+Passport Session
+  ↓
+Authenticated WanderLust User
+```
+
+- Existing username/password authentication continues to use Passport.js.
+- Google users are verified through Firebase Authentication.
+- The Firebase UID is linked to the corresponding WanderLust user in MongoDB.
+- After successful verification, a normal WanderLust Passport session is created.
 
 ## 🏗️ Project Architecture
 
@@ -124,13 +154,13 @@ Client Request → Routes → Controllers → Models (MongoDB) → Views (EJS) �
 The AI layer sits alongside this MVC structure as its own service:
 
 ```
-Chat Request → AI Routes → AI Controller → AI Service → n8n Workflow → OpenAI + MongoDB → AI Response
+Chat Request → AI Routes → AI Controller → AI Service → Google Gemini + MongoDB → AI Response
 ```
 
 - **AI Routes** (`routes/ai.js`) expose the chatbot endpoint.
 - **AI Controller** (`controllers/ai.js`) handles incoming chat requests and responses.
-- **AI Service** (`services/aiService.js`) manages communication with the n8n workflow.
-- **n8n** orchestrates the OpenAI call and, when relevant, queries the Listings API for live MongoDB data.
+- **AI Service** (`services/aiService.js`) manages communication with the Google Gemini API and the application's AI workflow.
+- **Google Gemini** processes the user's natural-language request and, when relevant, works with live listing data retrieved through the application backend.
 
 
 ## 🚀 Getting Started
@@ -145,8 +175,8 @@ Make sure you have the following installed:
 - [MongoDB](https://www.mongodb.com/) (local instance or a MongoDB Atlas connection string)
 - npm (comes bundled with Node.js)
 - A [Cloudinary](https://cloudinary.com/) account (for image uploads)
-- An [OpenAI](https://platform.openai.com/) API key (for the AI Travel Assistant)
-- An [n8n](https://n8n.io/) instance (self-hosted or cloud) to run the assistant's workflow
+- A [Google Gemini](https://ai.google.dev/) API key (for the AI Travel Assistant)
+- A [Firebase](https://firebase.google.com/) project with Google Authentication enabled (for Google Sign-In)
 
 ### Installation
 
@@ -173,8 +203,15 @@ CLOUD_NAME=your_cloudinary_cloud_name
 CLOUD_API_KEY=your_cloudinary_api_key
 CLOUD_API_SECRET=your_cloudinary_api_secret
 
-OPENAI_API_KEY=your_openai_api_key
-N8N_WEBHOOK_URL=your_n8n_workflow_webhook_url
+GEMINI_API_KEY=your_gemini_api_key
+
+# Firebase Admin SDK (local development)
+GOOGLE_APPLICATION_CREDENTIALS=path_to_firebase_service_account.json
+
+# Firebase Admin SDK (production / Render)
+FIREBASE_PROJECT_ID=your_firebase_project_id
+FIREBASE_CLIENT_EMAIL=your_firebase_client_email
+FIREBASE_PRIVATE_KEY=your_firebase_private_key
 ```
 
 > 🔒 Never commit your `.env` file. Make sure it's listed in `.gitignore`.
@@ -200,7 +237,7 @@ N8N_WEBHOOK_URL=your_n8n_workflow_webhook_url
    http://localhost:8080/listings
    ```
 
-4. The AI Travel Assistant will be available from the chatbot UI once your `N8N_WEBHOOK_URL` and `OPENAI_API_KEY` are configured.
+4. The AI Travel Assistant will be available from the chatbot UI once your `GEMINI_API_KEY` is configured. Google Sign-In requires the Firebase project and Firebase Authentication configuration to be set up.
 
 ## 📁 Folder Structure
 
@@ -212,7 +249,7 @@ WanderLust/
 ├── routes/               # Express route definitions
 │   └── ai.js             # AI chatbot API routes
 ├── services/             # External service integrations
-│   └── aiService.js      # Handles communication with the n8n workflow
+│   └── aiService.js      # Handles communication with the Google Gemini API
 ├── views/                # EJS templates and partials
 │   ├── layouts/
 │   ├── listings/
@@ -234,7 +271,7 @@ WanderLust/
 - [ ] Wishlist / saved listings
 - [ ] Booking calendar with availability tracking
 - [ ] Host dashboard with analytics
-- [ ] Google / GitHub OAuth login
+- [x] Google Sign-In authentication
 - [ ] Email notifications for bookings and reviews
 - [ ] Personalized AI itinerary generation
 - [ ] Voice-enabled AI assistant
@@ -261,8 +298,8 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 - Inspired by [Airbnb](https://www.airbnb.com/)
 - [Bootstrap](https://getbootstrap.com/) for UI components
 - [Cloudinary](https://cloudinary.com/) for media hosting
-- [OpenAI](https://openai.com/) for powering the AI Travel Assistant
-- [n8n](https://n8n.io/) for workflow orchestration
+- [Google Gemini](https://ai.google.dev/) for powering the AI Travel Assistant
+- [Firebase](https://firebase.google.com/) for Google Authentication
 - [Render](https://render.com/) for deployment
 
 ## 📬 Contact

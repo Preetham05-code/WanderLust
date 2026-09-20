@@ -7,6 +7,12 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+
+    firebaseUID: {
+        type: String,
+        unique: true,
+        sparse: true
+    }
 });
 
 userSchema.plugin(passportLocalMongoose);

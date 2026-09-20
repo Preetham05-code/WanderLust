@@ -19,6 +19,7 @@ const aiListingsRoutes = require("./routes/aiListings");
 app.use(express.json());
 app.use("/api", aiListingsRoutes);
 
+
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
@@ -102,6 +103,10 @@ passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+const firebaseAuthRouter = require("./routes/firebaseAuth.js");
+
+app.use("/auth/firebase", firebaseAuthRouter);
 
 app.use((req,res, next)=>{
     res.locals.success = req.flash("success");

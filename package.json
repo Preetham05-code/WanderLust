@@ -1,5 +1,5 @@
 {
-  "engines":{
+  "engines": {
     "node": "24.14.0"
   },
   "name": "wanderlust",
@@ -23,6 +23,7 @@
     "ejs-mate": "^4.0.0",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
+    "firebase-admin": "^14.4.0",
     "joi": "^18.2.3",
     "leaflet": "^1.9.4",
     "method-override": "^3.0.0",
